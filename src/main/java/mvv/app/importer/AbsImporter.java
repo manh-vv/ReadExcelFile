@@ -26,33 +26,31 @@ public abstract class AbsImporter {
 			return false;
 		}
 
-		FileInputStream fis = null;
+		long t1 = System.currentTimeMillis();
+		log.info("Importer is processing file [{}]", filePath);
+
+		boolean flag = true;
 
 		try {
-			fis = new FileInputStream(path.toFile());
-
-			boolean flag = readFile(path);
+			flag = readFile(path);
 
 			if (!flag) {
 				log.error("Read file error");
-				return false;
+				flag = false;
+			} else {
+				flag = processData();
 			}
-
-			return processData();
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Can not read file", e);
-
-		} finally {
-			if (fis != null) {
-				try {
-					fis.close();
-				} catch (IOException e) {
-					log.error(e.getMessage(), e);
-				}
-			}
+			flag = false;
 		}
 
-		return false;
+		log.info("Importer has finished processing file [{}], consumed time = {} ms"
+				, filePath
+				, System.currentTimeMillis() - t1
+		);
+
+		return flag;
 	}
 
 	protected abstract boolean readFile(Path path) throws IOException;

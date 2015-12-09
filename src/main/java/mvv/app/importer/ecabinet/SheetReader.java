@@ -13,8 +13,8 @@ import java.util.List;
 /**
  * Created by Manh on 12/9/2015.
  */
-public class ReadSheet<T extends AbsBean> implements IfcReadSheet<T> {
-	private static final Logger log = LogManager.getLogger(ReadSheet.class);
+public class SheetReader<T extends AbsBean> implements IfcSheetReader<T> {
+	private static final Logger log = LogManager.getLogger(SheetReader.class);
 
 	protected List<T> beanList;
 	private Class<T> persistentClass;

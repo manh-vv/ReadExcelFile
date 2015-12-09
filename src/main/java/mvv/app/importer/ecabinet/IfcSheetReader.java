@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by Manh on 12/9/2015.
  */
-public interface IfcReadSheet<T extends AbsBean> {
+public interface IfcSheetReader<T extends AbsBean> {
 	boolean readSheet(Sheet sheet);
 	List<T> getBeanList();
 }

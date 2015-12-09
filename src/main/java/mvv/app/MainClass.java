@@ -1,9 +1,8 @@
 package mvv.app;
 
-import java.io.File;
-
 import mvv.app.importer.AbsImporter;
-import mvv.app.importer.ecabinet.ExcelImporter;
+import mvv.app.importer.ExcelImporter;
+import mvv.app.importer.ecabinet.ECabinetImporter;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -44,9 +43,11 @@ public class MainClass {
 			return;
 		}
 
-		AbsImporter importer = new ExcelImporter();
+		AbsImporter importer = new ECabinetImporter();
 
-		importer.importFile(args[0]);
+		boolean flag = importer.importFile(args[0]);
+
+		log.info("result = {}", flag);
     }
 
     /**
