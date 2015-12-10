@@ -25,13 +25,13 @@ public class ECabinetImporter extends ExcelImporter {
 		Sheet stockSheet = workbook.getSheet("SheetStockSummary");
 		Sheet bandingStockSheet = workbook.getSheet("BandingStockSummary");
 
-		IfcSheetReader<ComponentBean> componentReader = new SheetReader<ComponentBean>();
+		IfcSheetReader<ComponentBean> componentReader = new SheetReader<ComponentBean>(ComponentBean.class);
 		componentReader.readSheet(componentSheet);
 
-		IfcSheetReader<StockBean> stockReader = new SheetReader<StockBean>();
+		IfcSheetReader<StockBean> stockReader = new SheetReader<StockBean>(StockBean.class);
 		stockReader.readSheet(stockSheet);
 
-		IfcSheetReader<BandingStockBean> bandingStockReader = new SheetReader<BandingStockBean>();
+		IfcSheetReader<BandingStockBean> bandingStockReader = new SheetReader<BandingStockBean>(BandingStockBean.class);
 		bandingStockReader.readSheet(bandingStockSheet);
 
 		return true;

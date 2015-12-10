@@ -6,7 +6,6 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,7 +16,11 @@ public class SheetReader<T extends AbsBean> implements IfcSheetReader<T> {
 	private static final Logger log = LogManager.getLogger(SheetReader.class);
 
 	protected List<T> beanList;
-	private Class<T> persistentClass;
+	private Class<T> clazz;
+
+	public SheetReader(Class<T> clazz) {
+		this.clazz = clazz;
+	}
 
 	public boolean readSheet(Sheet sheet) {
 		if (sheet == null) {
@@ -30,12 +33,17 @@ public class SheetReader<T extends AbsBean> implements IfcSheetReader<T> {
 		int rowIdx = 0;
 		for (Row row : sheet) {
 
-			if (rowIdx == 0) {
+			if (rowIdx++ == 0) {
 				continue;
 			}
 
 			// Begin: fill value to bean
 			T bean = createBean();
+
+			if (bean == null) {
+				return false;
+			}
+
 			int idx = 0;
 			for (Cell cell : row) {
 				bean.readCell(idx++, cell.getStringCellValue());
@@ -43,21 +51,20 @@ public class SheetReader<T extends AbsBean> implements IfcSheetReader<T> {
 
 			beanList.add(bean);
 			// End  : fill value to bean
-
-			rowIdx++;
 		}
 
 		return true;
 	}
 
-	private T createBean() {
-		if (persistentClass == null) {
-			persistentClass = (Class<T>)
-					((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+	protected T createBean() {
+
+		if (clazz == null) {
+			log.error("missing persistence class of generic type T");
+			return null;
 		}
 
 		try {
-			return persistentClass.newInstance();
+			return clazz.newInstance();
 		} catch (InstantiationException e) {
 			log.error(e.getMessage(), e);
 		} catch (IllegalAccessException e) {
