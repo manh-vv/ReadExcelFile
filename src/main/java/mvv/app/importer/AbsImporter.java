@@ -29,7 +29,7 @@ public abstract class AbsImporter {
 		long t1 = System.currentTimeMillis();
 		log.info("Importer is processing file [{}]", filePath);
 
-		boolean flag = true;
+		boolean flag;
 
 		try {
 			flag = readFile(path);
@@ -45,7 +45,7 @@ public abstract class AbsImporter {
 			flag = false;
 		}
 
-		log.info("Importer has finished processing file [{}], consumed time = {} ms"
+		log.info("Importer has finished file processing [{}], consumed time = {} ms"
 				, filePath
 				, System.currentTimeMillis() - t1
 		);
